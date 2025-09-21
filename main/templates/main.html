@@ -8,11 +8,13 @@
 </a>
 
 <a href="{% url 'main:logout' %}">
-  <button>Logout ᕙ(  •̀ ᗜ •́  )ᕗ?</button>
+  <button>Logout?</button>
 </a>
 
 <h5>Sesi terakhir login : {{ last_login }}</h5>
 <hr>
+
+<h2>Hi, {{ username }}. What are you looking for?</h2>
 
 <a href="?filter=all">
     <button type="button">⟡₊All Products</button>
@@ -22,7 +24,7 @@
 </a> 
 
 {% if not product_list %}
-<p>Belum ada product pada OldSchool Strike (╥﹏╥)</p>
+<p>Belum ada product (╥﹏╥)</p>
 {% else %}
 
 {% for product in product_list %}

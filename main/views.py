@@ -23,7 +23,8 @@ def show_main(request):
         'class': 'PBP A',
         'npm' : '2406496403',
         'product_list': product_list,
-        'last_login': request.COOKIES.get('last_login', 'Never')
+        'last_login': request.COOKIES.get('last_login', 'Never'),
+        'username': request.COOKIES.get('username', request.user.username)
     }
     return render(request, "main.html", context)
 
@@ -92,6 +93,7 @@ def login_user(request):
         login(request, user)
         response = HttpResponseRedirect(reverse("main:show_main"))
         response.set_cookie('last_login', str(datetime.datetime.now()))
+        response.set_cookie('username', user.username) 
         return response
    else:
       form = AuthenticationForm(request)
