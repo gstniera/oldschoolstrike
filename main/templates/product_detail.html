@@ -17,4 +17,10 @@
 <p><b>Description── .✦:</b></p>
 <p>⤷" {{ product.description }} ˎ"˗</p>
 
+{% if product.user %}
+    <p><i>Author: {{ product.user.username }}</i></p>
+{% else %}
+    <p><i>Author: Anonymous</i></p>
+{% endif %}
+
 {% endblock content %}
