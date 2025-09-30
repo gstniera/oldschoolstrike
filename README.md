@@ -130,3 +130,64 @@ v. untuk menghubungkan model Product dengan User pertama-tama tambahkan contrib.
 
 vi. Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last_login pada halaman utama aplikasi.
 buka views.py dan di show_main tambahkan ke context 'username' : request.COOKIES.get('username', request.user.username). Di login user set cookie dengan response.set_cookie('username', user.name), lalu return response dengan memperhatikan identasi. Lakukan hal serupa di logout dimana tambahkan response.delete_cookie('username') dan return response untuk menghapus cookie saat logout. Terakhir tambahkan di main.html baris untuk menampilka username yang currently active/loggin in. 
+
+
+TUGAS INDIVIDU 5:
+a. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+Dalam CSS, ketika terdapat beberapa aturan gaya/style yang dapat berlaku untuk elemen HTML yang sama, browser akan milih aturan berdasarkan specificity dan urutan penulisannya. Semakin spesifik selector maka semakin tinggi prioritasnya. Prioritas tertinggi dapat override selector yang lain. Untuk paham specificity, kita harus tau bobot masing-masing selector. Bobot atau nilai specificity dihitung berdasarkan jenis dan jumlah kategori selector yang digunakan, yaitu ID selector, class selector, serta tipe selector (dan pseudo-element selector)
+Urutan prioritas selector dari yang tertinggi ke terendah:
+1. Inline styles (misalnya <h1 style="color:red">): memiliki nilai specificity tertinggi (1,0,0,0).
+2. Selector ID (contoh #header): nilai specificity berikutnya (0,1,0,0)
+3. Selector kelas, atribut, pseudo-class (contoh .container, [type="text"], :hover): nilai (0,0,1,0)
+4. Selector elemen atau pseudo-elemen (contoh div, p, ::before): nilai (0,0,0,1)
+5. Selector universal (*): nilai terendah (0,0,0,0)
+6. Selain itu, aturan yang ditandai !important dapat mengesampingkan aturan lain. Jika dua aturan memiliki specificity yg sama, maka aturan yang muncul terakhir dalam kode yang akan diterapkan. 
+Misalnya sebuah elemen <h1 id="header" class="title"> memiliki tiga aturan warna (h1, .title, dan #header), yang akan berlaku adalah aturan dengan selector #header karena ID lebih spesifik.
+- reference:
+Easycoding. (2024, October 1). Urutan Prioritas Selector CSS. Retrieved from https://www.easycoding.id/blog/urutan-prioritas-selector-css-specificity-panduan-lengkap-untuk-memahami-dan-menggunakan
+
+b. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum Menerapkan responsive design, serta jelaskan mengapa!
+Desain responsive memastikan tampilan website aplikasi web tetap optimal di berbagai ukuran layar (desktop, tablet, smartphone, dll). Hal ini penting karena mayoritas pengguna mengakses web melalui perangkat mobile. Terdapat studi yang menyebutkan bahwa 53% pengguna internet akan meninggalkan suatu website jika halamannya terlalu lambat atau tampilannya tidak sesuai dengan layar perangkat mereka. Dengan desain yg responsive, website dapat menyesuaikan letak, ukuran gambar, dan huruf agar nyaman dibaca di layar kecil, sehingga meningkatkan pengalaman pengguna (UX). Selain itu, Google mengutamakan website yang mobile-friendly sehingga website yg responsive mendapat lebih banyak traffic.
+Contoh aplikasi web yang telah menerapkan desain responsive beberapa diantaranya adalah Amazon/Shopee/Tokopedia (online shops). Website besar tersebut menyesuaikan tampilan interface agar sama mudahnya utk digunakan lewat HP ataupun desktop. Sebaliknya, website lawas atau ga responsive (kayak website-website pemerintahan lama atau SIAKNG) sering kali masih memaksa pengguna untuk zoom dan scroll secara horizontal. Akibatnya, pengguna kesulitan utk membaca konten dan beralih. Oleh karena itu, responsive design sangat penting untuk menjangkau audiens yang luas dan mempertahankan kenyamanan pengguna.
+- reference:
+Nurul Huda. (2024, November 29). Apa itu Responsive Web Design? Dewaweb. Retrieved from https://www.dewaweb.com/blog/pengertian-website-responsive/#:~:text=Keunggulan%20utama%20dari%20responsive%20web,dan%20mengurangi%20tingkat%20bounce%20rate 
+
+c. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+Margin, border, dan padding adalah bagian dari CSS Box Model yang mengontrol tata letak elemen:
+> Margin adalah spasi di luar elemen yang berada di antara border elemen dengan elemen lain. Margin ngasih jarak eksternal supaya elemen tidak saling menumpuk. Menambah margin ga akan mengubah ukuran kotak elemen itu sendiri, cuma menggeser jarak ke elemen sekitar. Kita bisa mengatur margin untuk masing-masing sisi elemen pake properti margin-top, margin-right, margin-bottom, dan margin-left. 
+> Border adalah garis tepi (tepi luar) elemen yang membatasi padding dan margin. Border bisa dikasih ketebalan, style, dan warna, misalnya border: 1px solid black. Border “mengelilingi” padding dan konten.
+> Padding adalah spasi di dalam elemen, antara konten (teks, gambar, dll) dan border. Padding nambah ruang internal supaya konten ga terlalu menempel sama border. Menambah padding akan memperbesar total ukuran elemen karena ruang extra di dalamnya. Kita dapat mengatur padding untuk setiap sisi elemen dengan properti padding-top, padding-right, padding-bottom, dan padding-left. 
+Contoh implementasi:
+div {
+  border: 15px solid green;
+  padding: 50px;
+  margin: 20px;
+}
+- reference:
+Prasatya. (2025, July 29). Apa itu Margin? Apa perbedaannya dengan Padding? Codepolitan. Retrieved from https://www.codepolitan.com/blog/apa-itu-margin-apa-perbedaannya-dengan-padding/
+https://www.w3schools.com/css/css_boxmodel.asp#:~:text=%2A%20Content%20,The%20margin%20is%20transparent 
+
+d. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+> Flexbox (Flexible Box Layout) adalah model layout satu dimensi. Flexbox fokus pada pengaturan elemen dalam satu baris atau satu kolom saja. Dengan flexbox, kita bisa mendistribusikan ruang di antara item dan mengatur perataan horizontal/vertikal. Flexbox berguna untuk layout yang sederhana dan linier, misalnya menu navigasi, toolbar, atau mengatur kumpulan tombol dalam satu baris. Flexbox juga berguna untuk tata letak responsive di satu arah karena elemen dapat wrap atau nyesuaiin ukurannya kalau ruang berubah.
+> CSS Grid adalah model layout dua dimensi yang membuat kita mengatur elemen dalam baris dan kolom secara bersamaan. Dengan grid, kita dapat mendefinisikan jumlah baris dan kolom, mengatur jarak antar sel (gap), dan menempatkan item di sel tertentu. Grid berguna untuk membuat desain halaman yang lebih kompleks dan terstruktur, seperti dashboard, galeri produk, dll. Grid memudahkan layout responsive  yang perlu menyesuaikan banyak kolom/baris pada ukuran layar berbeda.
+Flexbox cocok untuk mengatur baris atau kolom sederhana dengan item dinamis, sedangkan Grid cocok untuk layout keseluruhan halaman yang kompleks. 
+- reference:
+Irhan Hisyam. (2023, October 31). CSS Grid vs Flexbox: Perbandingan, Penggunaan, dan Contohnya. Dibimbing.id. Retrieved from https://dibimbing.id/blog/detail/memahami-penggunaan-css-grid-dan-flexbox#:~:text=CSS%20Grid%20sangat%20berguna%20untuk,yang%20lebih%20sederhana%20dan%20linier
+https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox#:~:text=The%20flexible%20box%20layout%20module,the%20rest%20of%20these%20guides
+
+e. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+i. Implementasikan fungsi untuk menghapus dan mengedit product.
+> Untuk button edit product pertama-tama kita tambahkan fungsi edit_product di views.py yang mengambil objek Product dengan get_object_or_404, membuat ProductForm(request.POST or None, instance=news) supaya form terisi data lama, lalu jika request adalah POST dan form valid menyimpan perubahan dengan form.save() dan redirect ke main:show_mainme. Di urls.py kita impor edit_product dan menambahkan path nya. Kemudian, perbarui main.html di loop product_list dengan menampilkan tombol Edit yang hanya muncul jika user.is_authenticated and product.user == user yang menautkan ke halaman edit.
+> Untuk button hapus product pertama-tama kita buat fungsi delete_product(request, id) di views.py dan panggil product.delete() lalu arahin kembali ke halaman utama. Import fungsi tersebut di urls.py dan tambahkan route path nya. Pada main.html tambahkan tombol Delete di dalam loop product_list sehingga tampil bersama tombol Edit dan buat tombol tersebut agar hanya pemilik yang melihatnya.
+
+ii. Kustomisasi halaman login, register, tambah product, edit product, dan detail product semenarik mungkin.
+> Untuk kustomisasi halaman-halaman yang ada saya sendiri menggunakkan tema/color-palette warna biru secara konsisten dimana saya gunakan pada button, text, background, grid, dan semacamnya, untuk tampilan yang rapi dan enak diliat. Login akan menampilkan autentikasi, tampilkan error/message, CSRF. Register yaitu membuat user baru dengan validasi password dan feedback. Tambah Product adalah form dengan CSRF, field, upload thumbnail dan tombol Publish. Edit Product dimana form terisi otomatis lewat instance=..., cek izin supaya hanya pemilik bisa menyimpan perubahan. Detail Product dengan layout responsive grid, preview gambar, info harga/kategori/seller, dan featured serta juga ada handling error/messages dan responsive styling supaya semuanya rapi di desktop dan mobile.
+
+iii. Kustomisasi halaman daftar product menjadi lebih menarik dan responsive. Jika pada aplikasi belum ada product yang tersimpan, halaman daftar product akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar. Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan card.
+> Halaman daftar produk ini dibuat responsive dimana ada navbar, background biru muda dan padding atas agar tidak tertutup navbar, serta tampilan terakhir login. Jika belum ada produk ditampilkan, akan muncul gambar (yang disimpan di static) untuk no_product serta pesan dan opsi untuk ke halaman buat produk. Sedangkan kalo ada, produk ditampilkan dalam grid responsive yang merender setiap product lewat card_product.html. Keseluruhan pake gaya card putih dan palette biru untuk konsistensi, sehingga halaman mudah dibaca dan nyaman dipakai di desktop ataupun mobile.
+
+iv. Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+Tombol Edit dibuat sebagai link yang hanya ditampilkan bila user.is_authenticated dan product.user == user, jadi ketika diklik user akan ke halaman edit yang memuat form dengan instance=product sehingga field nya udh otomatis terisi. Tombol Delete dibuat sebagai form POST yang berisi {% csrf_token %} dan onsubmit="return confirm supaya ada konfirmasi dan proteksi CSRF. Pastikan request.user == product.user sebelum product.delete() dan redirect. 
+
+v. Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
+Navbar ini menggunakan Tailwind untuk styling (background, border, shadow, z-index) dan dibagi menjadi tiga area: di kiri ada title, di tengah-kanan ada navigasi desktop yang nampilin link Home dan Create Product, dan bagian user desktop yang juga hanya tampil di layar lebar untuk menampilkan nama/npm/class, dan link Logout atau menampilkan Login/Register ketika belum terautentikasi. Untuk mobile ada tombol hamburger yang terdiri dari tiga ikon garis untuk men-toggle .mobile-menu yang awalnya hidden. Isinya adalah untuk melihat fitur tombol home, create product, nampilin identitas, serta link logout.
