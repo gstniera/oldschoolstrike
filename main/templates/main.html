@@ -1,54 +1,54 @@
-<h1>⚽︎ldSchool Strikeᯓ★</h1>
-<h4>Nama    : {{name}}</h4>
-<h4>Kelas   : {{class}}</h4>
-<h4>NPM     : {{npm}}</h4>
+{% extends 'base.html' %}
+{% load static %}
 
-<a href="{% url 'main:create_product' %}">
-  <button>+ Add Product ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧</button>
-</a>
+{% block meta %}
+<title>Oldschool Strike</title>
+{% endblock meta %}
 
-<a href="{% url 'main:logout' %}">
-  <button>Logout?</button>
-</a>
+{% block content %}
+{% include 'navbar.html' %}
+<div class="bg-[#eaf6ff] w-full pt-16 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-<h5>Sesi terakhir login : {{ last_login }}</h5>
-<hr>
+    <div class="mb-8">
+      <h1 class ="text-3xl font-bold text-[#395886] mb-2">Hi, {{username}} !! </h1>
+      <h1 class ="text font-semibold text-[#395886] mb-2">Take a look at our latest product ᕙ(  •̀ ᗜ •́  )ᕗ</h1>
+    </div>
 
-<h2>Hi, {{ username }}. What are you looking for?</h2>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-[#FFFFFF] rounded-lg border border-[#D5DEEF] p-4">
+      <div class="flex space-x-3 mb-4 sm:mb-0">
+        <a href="?" class="{% if request.GET.filter == 'all' or not request.GET.filter  %} bg-[#628ECB] text-white{% else %}bg-[#D5DEEF] text-[#395886] border border-[#FFFFFF]{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#395886] hover:text-white">
+          ALL PRODUCTS₊˚⊹♡
+        </a>
+        <a href="?filter=my" class="{% if request.GET.filter == 'my' %} bg-[#628ECB] text-[#FFFFFF]{% else %}bg-[#D5DEEF] text-[#395886] border border-[#FFFFFF]{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#395886] hover:text-white">
+          MY PRODUCTS(˶ˆ꒳ˆ˵)
+        </a>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="text-sm text-gray-500">
+        ──.✦Last login: {{ last_login }}
+        </div>
+      {% endif %}
+    </div>
 
-<a href="?filter=all">
-    <button type="button">⟡₊All Products</button>
-</a>
-<a href="?filter=my">
-    <button type="button">My Products✧˖</button>
-</a> 
-
-{% if not product_list %}
-<p>Belum ada product (╥﹏╥)</p>
-{% else %}
-
-{% for product in product_list %}
-<div>
-  <h3><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h3>
-
-  <p><b>{{ product.get_category_display }}</b>{% if product.is_featured %} 
-    <b>Featured</b>{% endif %}{% if product.is_product_hot %} | 
-    <b>Hot</b>{% endif %} |<i> {{ product.date_added|date:"d M Y" }}</i></p>
-
-  {% if product.thumbnail %}
-  <img src="{{ product.thumbnail }}" alt="thumbnail" width="250" height="250">
-  <br />
-  {% endif %}
-
-  <p>PRICE: Rp {{ product.price }}</p>
-
-  <p><b>Description── .✦:</b></p>
-  <p>⤷" {{ product.description|truncatewords:25 }}... ˎ"˗</p>
-
-  <p><a href="{% url 'main:show_product' product.id %}"><button>Detail⋆˙⟡</button></a></p>
+    {% if not product_list %}
+      <div class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+        <div class="w-32 h-32 mx-auto mb-4">
+          <img src="{% static 'image/no-product.png' %}" alt="No product available" class="w-full h-full object-contain">
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No product at the moment...</h3>
+        <p class="text-gray-500 mb-6">Be the first to share your product with the community( - ᴗ •́ )!!</p>
+        <a href="{% url 'main:create_product' %}" class="inline-flex items-center px-4 py-2 bg-[#2F80E4] text-white rounded-md hover:bg-[#395886] transition-colors">
+          ⤷"Create Product ˎˊ˗
+        </a>
+      </div>
+    {% else %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for product in product_list %}
+          {% include 'card_product.html' with product=product %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
 </div>
-
-<hr>
-{% endfor %}
-
-{% endif %}
+{% endblock content %}

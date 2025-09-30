@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block meta %}
-<title>Create Product - Oldschool Strike</title>
+<title>Edit Product - Oldschool Strike</title>
 {% endblock meta %}
 
 {% block content %}
-<div class="bg-[#D5DEEF] w-full min-h-screen">
+<div class="bg-[#F0F3FA] w-full min-h-screen">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- Back Navigation -->
     <div class="mb-6">
-      <a href="{% url 'main:show_main' %}" class="text-[#395886] hover:text-gray-900 font-medium transition-colors">
-        ← Back to Product◝(ᵔᗜᵔ)◜
+      <a href="{% url 'main:show_main' %}" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">
+        ← Back to Product
       </a>
     </div>
     
     <!-- Form -->
-    <div class="bg-[#F0F3FA] rounded-lg border border-gray-200 p-6 sm:p-8 form-style">
+    <div class="bg-[#D5DEEF] rounded-lg border border-gray-200 p-6 sm:p-8 form-style">
       <div class="text-center mb-8">
-        <h1 class="text-2xl font-bold text-[#395886] mb-2">ᯓ★Create New Product⋆˚࿔</h1>
+        <h1 class="text-2xl font-bold text-[#395886] mb-2">ᯓ★Edit Your Product⋆˚࿔</h1>
       </div>
       
       <form method="POST" class="space-y-6">
@@ -39,12 +41,12 @@
           </div>
         {% endfor %}
         
-        <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
-          <a href="{% url 'main:show_main' %}" class="order-2 sm:order-1 bg-white px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-[#B1C9EF] transition-colors text-center">
-            Cancel
+        <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-[#F0F3FA]">
+          <a href="{% url 'main:show_main' %}" class="order-2 sm:order-1 bg-white px-6 py-3 border border-[#F0F3FA] text-[#395886] rounded-md font-medium hover:bg-[#B1C9EF] transition-colors text-center">
+            Cancel?
           </a>
-          <button type="submit" class="order-1 sm:order-2 flex-1 bg-[#2F80E4] text-white px-6 py-3 rounded-md font-medium hover:bg-[#395886] transition-colors">
-            Publish Product⌯⌲
+          <button type="submit" class="order-1 sm:order-2 flex-1 bg-[#628ECB] text-white px-6 py-3 rounded-md font-medium hover:bg-[#395886] transition-colors">
+            Update Product⌯⌲
           </button>
         </div>
       </form>
