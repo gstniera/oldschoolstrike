@@ -102,7 +102,7 @@ c. Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan
 i. Kelebihan Session
 Session menyimpan state di server sehingga browser hanya menyimpan cookie berisi session ID dan karena data disimpan di backend maka kapasitas penyimpanan jadi lebih besar dan fleksibel. Session juga membuat informasi login bersifat transparan.
 ii. Kekurangan Session 
-Sangat tergantung pada cookie sessionid. Jika cookie dinonaktifkan atau dihapus oleh pengguna, aplikasi tidak dapat melacak sesi sama sekali. Selain itu, sesi juga bersifat sementara dan menyimpan session memerlukan perhatian pada skala aplikasi yang berpengaruh terhadap performa.
+Sangat tergantung pada cookie session id. Jika cookie dinonaktifkan atau dihapus oleh pengguna, aplikasi tidak dapat melacak sesi sama sekali. Selain itu, sesi juga bersifat sementara dan menyimpan session memerlukan perhatian pada skala aplikasi yang berpengaruh terhadap performa.
 iii. Kelebihan Cookie
 Cookie dapat diatur masa berlakunya sehingga data kecil yang tidak sensitif dapat bertahan dimana berguna untuk fitur yang menyimpan preferensi interface sehingga pengguna tidak perlu isi setiap kali. Karena state sederhana dikelola browser maka beban server berkurang.
 iv. Kekurangan Cookie
@@ -177,7 +177,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_c
 
 e. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
 i. Implementasikan fungsi untuk menghapus dan mengedit product.
-> Untuk button edit product pertama-tama kita tambahkan fungsi edit_product di views.py yang mengambil objek Product dengan get_object_or_404, membuat ProductForm(request.POST or None, instance=news) supaya form terisi data lama, lalu jika request adalah POST dan form valid menyimpan perubahan dengan form.save() dan redirect ke main:show_mainme. Di urls.py kita impor edit_product dan menambahkan path nya. Kemudian, perbarui main.html di loop product_list dengan menampilkan tombol Edit yang hanya muncul jika user.is_authenticated and product.user == user yang menautkan ke halaman edit.
+> Untuk button edit product pertama-tama kita tambahkan fungsi edit_product di views.py yang mengambil objek Product dengan get_object_or_404, membuat ProductForm(request.POST or None, instance=product) supaya form terisi data lama, lalu jika request adalah POST dan form valid menyimpan perubahan dengan form.save() dan redirect ke main:show_mainme. Di urls.py kita impor edit_product dan menambahkan path nya. Kemudian, perbarui main.html di loop product_list dengan menampilkan tombol Edit yang hanya muncul jika user.is_authenticated and product.user == user yang menautkan ke halaman edit.
 > Untuk button hapus product pertama-tama kita buat fungsi delete_product(request, id) di views.py dan panggil product.delete() lalu arahin kembali ke halaman utama. Import fungsi tersebut di urls.py dan tambahkan route path nya. Pada main.html tambahkan tombol Delete di dalam loop product_list sehingga tampil bersama tombol Edit dan buat tombol tersebut agar hanya pemilik yang melihatnya.
 
 ii. Kustomisasi halaman login, register, tambah product, edit product, dan detail product semenarik mungkin.

@@ -111,4 +111,145 @@
       </div>
     </div>
   </div>
-  {% endblock content %}
+
+<script>
+(function () {
+  // safe toast helper
+  function showToastSafe(message, type = 'normal') {
+    if (typeof showToast === 'function') {
+      showToast(message, type);
+    } else {
+      console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+  }
+
+  function getCookie(name) {
+    const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return v ? v.pop() : '';
+  }
+
+  // cari form register
+  let form = document.getElementById('registerForm');
+  if (!form) {
+    const forms = document.getElementsByTagName('form');
+    for (let f of forms) {
+      if (f.querySelector('input[name="username"]')) {
+        form = f;
+        break;
+      }
+    }
+  }
+  if (!form) {
+    console.warn('register-ajax: form register tidak ditemukan');
+    return;
+  }
+
+  // elemen error minimal
+  let errorEl = document.getElementById('registerError');
+  if (!errorEl) {
+    errorEl = document.createElement('div');
+    errorEl.id = 'registerError';
+    errorEl.className = 'hidden text-sm text-red-600 whitespace-pre-line mt-3';
+    form.parentNode.insertBefore(errorEl, form.nextSibling);
+  }
+
+  const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    errorEl.classList.add('hidden');
+    errorEl.textContent = '';
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+    }
+
+    try {
+      const fdOrig = new FormData(form);
+
+      // ambil nilai password dari berbagai kemungkinan nama input
+      const pw1 = (fdOrig.get('password1') ?? fdOrig.get('password') ?? fdOrig.get('password_1') ?? '').toString();
+      const pw2 = (fdOrig.get('password2') ?? fdOrig.get('password_confirm') ?? fdOrig.get('confirm_password') ?? fdOrig.get('password_2') ?? '').toString();
+
+      // client-side validation: wajib, dan harus sama
+      if (!pw1 || !pw2) {
+        const msg = 'Password dan konfirmasi password wajib diisi.';
+        errorEl.textContent = msg;
+        errorEl.classList.remove('hidden');
+        showToastSafe(msg, 'error');
+        return;
+      }
+
+      if (pw1 !== pw2) {
+        const msg = 'Password tidak sama. Mohon periksa kembali.';
+        errorEl.textContent = msg;
+        errorEl.classList.remove('hidden');
+        showToastSafe(msg, 'error');
+        return;
+      }
+
+      // Siapkan FormData yang dikirim ke server.
+      // Kirim username jika ada, dan kirim password1/password2 (standar Django) plus password sebagai fallback.
+      const fd = new FormData();
+      if (fdOrig.has('username')) fd.append('username', fdOrig.get('username'));
+      // gunakan nama-field yang umum dipakai server-side
+      fd.append('password1', pw1);
+      fd.append('password2', pw2);
+      // fallback: jika server mengharapkan 'password'
+      fd.append('password', pw1);
+
+      const url = "{% url 'main:register_ajax' %}";
+
+      const resp = await fetch(url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        body: fd
+      });
+
+      if (resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        // show toast sebelum redirect supaya user lihat notifikasi
+        showToastSafe('Your account has been successfully created ദ്ദി(ᵔᗜᵔ)!', 'success');
+        sessionStorage.setItem('toastFlag', 'register');
+
+        // beri sedikit jeda agar toast sempat muncul
+        setTimeout(() => {
+          window.location.href = "{% url 'main:login' %}";
+        }, 800);
+        return;
+      } else {
+        const data = await resp.json().catch(() => null);
+        let message = 'Registrasi gagal.';
+        if (data) {
+          if (data.errors) {
+            message = Object.values(data.errors).join('\n');
+          } else if (data.detail) {
+            message = data.detail;
+          } else if (data.error) {
+            message = data.error;
+          }
+        } else {
+          message = 'Registrasi gagal (server error ' + resp.status + ')';
+        }
+        errorEl.textContent = message;
+        errorEl.classList.remove('hidden');
+        showToastSafe(message, 'error');
+      }
+    } catch (err) {
+      console.error('Register error', err);
+      const msg = 'Gagal terhubung ke server. Coba lagi.';
+      errorEl.textContent = msg;
+      errorEl.classList.remove('hidden');
+      showToastSafe(msg, 'error');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+      }
+    }
+  });
+})();
+</script>
+{% endblock content %}

@@ -6,108 +6,307 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="bg-[#F0F3FA] w-full min-h-screen py-8">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="bg-[#F0F3FA] w-full min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Back Navigation -->
+        <div class="mb-6">
+            <a href="{% url 'main:show_main' %}" class="text-[#395886] hover:text-gray-900 font-medium transition-colors">
+                ← Back to Product
+            </a>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loading-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+            <svg class="animate-spin h-8 w-8 text-[#628ECB] inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            <p class="text-gray-600 mt-3">Loading product detail...</p>
+        </div>
 
-    <div class="mb-6">
-      <a href="{% url 'main:show_main' %}" class="text-[#395886] hover:text-gray-900 font-medium transition-colors">
-        ← Back to Product
-      </a>
+        <!-- Error State -->
+        <div id="error-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
+            <div class="w-16 h-16 mx-auto mb-4">
+                <div class="text-red-500 text-5xl">⚠️</div>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Failed to load product</h3>
+            <p class="text-gray-500">Please try again later.</p>
+        </div>
+        
+        <!-- Product Content -->
+        <article id="product-article" class="bg-white rounded-lg border border-gray-200 overflow-hidden hidden">
+            
+            <!-- Header -->
+            <div class="p-6 sm:p-8">
+                <!-- badges container (category etc.) -->
+                <div id="badges-container" class="flex flex-wrap items-center gap-2 mb-4">
+                    {% if product.get_category_display %}
+                      <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-[#0F6FB8] text-white">
+                        {{ product.get_category_display }}
+                      </span>
+                    {% endif %}
+                </div>
+                
+                <h1 id="product-name" class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
+                    {{ product.name }}
+                </h1>
+                
+                <div class="flex flex-wrap items-center text-sm text-gray-500 gap-4">
+                    <time id="product-date" datetime="{% if product.date_added %}{{ product.date_added|date:'c' }}{% endif %}">
+                        {% if product.date_added %}{{ product.date_added|date:"d M Y" }}{% endif %}
+                    </time>
+                    <span id="product-views">
+                        <!-- optional: views (server may not set this) -->
+                    </span>
+                </div>
+            </div>
+
+            <!-- Featured/Image + Right column -->
+            <div class="px-6 sm:px-8">
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Left: image area (maps to your previous lg:col-span-7) -->
+                <div class="lg:col-span-7">
+                  <div id="featured-image-container" class="rounded-lg overflow-hidden border border-gray-100 bg-white flex items-center justify-center p-4 min-h-[420px] md:min-h-[520px] lg:min-h-[640px]">
+                    {% if product.thumbnail %}
+                      <img id="featured-image" src="{{ product.thumbnail }}" alt="{{ product.name }}" class="w-auto max-w-full max-h-[640px] object-contain">
+                    {% else %}
+                      <img id="featured-image" src="" alt="{{ product.name }}" class="w-auto max-w-full max-h-[640px] object-contain">
+                    {% endif %}
+                  </div>
+                </div>
+
+                <!-- Right: meta/info (maps to your previous lg:col-span-5) -->
+                <div class="lg:col-span-5 flex flex-col justify-start">
+                  <!-- Category + Date small -->
+                  <div class="mt-3 flex items-center gap-4 text-sm">
+                    {% if product.category %}
+                      <span class="inline-block px-2 py-1 rounded text-sm font-medium text-white bg-red-600">
+                        {{ product.category }}
+                      </span>
+                    {% endif %}
+                    <time id="product-date-duplicate" datetime="{% if product.date_added %}{{ product.date_added|date:'c' }}{% endif %}" class="text-gray-500 hidden">
+                      {% if product.date_added %}{{ product.date_added|date:"d M Y" }}{% endif %}
+                    </time>
+                  </div>
+
+                  <!-- Price -->
+                  <div class="mt-6">
+                    <div class="text-lg text-gray-600">The Price:</div>
+                    <div id="product-price" class="text-3xl font-extrabold text-[#111827]">
+                      Rp {% if product.price %}{{ product.price }}{% endif %}
+                    </div>
+                  </div>
+
+                  <!-- Seller -->
+                  <div class="mt-6">
+                    <h3 class="text-sm font-semibold text-gray-900">Seller</h3>
+                    <ul class="list-disc list-inside mt-2 text-sm text-gray-700">
+                      <li id="product-seller">{% if product.user %}{{ product.user.username }}{% endif %}</li>
+                    </ul>
+                  </div>
+
+                  <!-- Details -->
+                  <div class="mt-6 border-t border-gray-100 pt-4">
+                    <div class="flex items-center justify-between">
+                      <div class="text-sm font-medium text-gray-900">Details</div>
+                      <div class="text-sm text-gray-400">+</div>
+                    </div>
+                  </div>
+
+                  <!-- Description -->
+                  <div class="mt-4">
+                    <h3 class="text-sm font-semibold text-gray-900">Description── .✦:</h3>
+                    <div id="product-description" class="mt-3 prose prose-sm max-w-none text-gray-700">
+                      {% if product.description %}{{ product.description }}{% endif %}
+                    </div>
+                  </div>
+
+                  <!-- Footer CTA (kept here to preserve layout) -->
+                  <div class="mt-8 bg-[#395886] rounded-b-2xl">
+                    <div class="text-center text-m font-bold text-white py-4">
+                      ᯓ⚽︎LDSCHOOL STRIKEᯓ
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Author / meta footer -->
+            <div class="border-t border-gray-200 p-6 sm:p-8 bg-gray-50 hidden">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="font-medium text-gray-900">
+                            <p id="product-author">Seller: {% if product.user %}{{ product.user.username }}{% else %}Loading...{% endif %}</p>
+                        </div>
+                        <p class="text-sm text-gray-500">Seller</p>
+                    </div>
+                </div>
+            </div>
+        </article>
     </div>
+</div>
 
-    <article class="bg-white rounded-2xl border border-[#E6EEF6] shadow-sm overflow-hidden">
-      <div class="p-6 sm:p-8">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // ---------- CONFIG ----------
+  const PRODUCT_ID = "{{ product.id|default_if_none:product.pk|default_if_none:'' }}";
+  const PRODUCT_DETAIL_ENDPOINT = PRODUCT_ID
+    ? `{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', PRODUCT_ID)
+    : null;
 
-        <div class="flex items-start justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-[#0F6FB8] text-white">
-              {{ product.get_category_display }}
-            </span>
-            {% if product.is_featured %}
-              <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-[#B1C9EF] text-[#395886]">
-                Featured
-              </span>
-            {% endif %}
-          </div>
-        </div>
+  // ---------- DOM REFS ----------
+  const loadingState = document.getElementById('loading-state');
+  const errorState = document.getElementById('error-state');
+  const articleContent = document.getElementById('product-article') || document.querySelector('article.bg-white.rounded-lg, article.bg-white.rounded-2xl, article');
+  const productName = document.getElementById('product-name') || (articleContent && articleContent.querySelector('h1'));
+  const productPrice = document.getElementById('product-price') || (articleContent && articleContent.querySelector('.text-3xl.font-extrabold, .text-3xl'));
+  const featuredImage = document.getElementById('featured-image') || (articleContent && articleContent.querySelector('img'));
+  const productDate = document.getElementById('product-date') || (articleContent && articleContent.querySelector('time'));
+  const productSeller = document.getElementById('product-seller') || (articleContent && articleContent.querySelector('.list-disc li'));
+  const productDescription = document.getElementById('product-description') || (articleContent && articleContent.querySelector('.mt-4 .prose, .prose'));
 
-        <div>
-          <h1 class="text-2xl md:text-3xl font-extrabold text-[#0F172A] leading-tight">
-                {{ product.name }}
-              </h1>
-        </div>
+  // ensure show/hide helpers exist
+  function showState(state) {
+    if (loadingState) loadingState.classList.toggle('hidden', state !== 'loading');
+    if (errorState) errorState.classList.toggle('hidden', state !== 'error');
+    if (articleContent) articleContent.classList.toggle('hidden', state !== 'ready');
+  }
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-  
-      <!-- Left column: gambar -->
-      <div class="lg:col-span-7">
-        {% if product.thumbnail %}
-          <div class="rounded-lg overflow-hidden border border-gray-100 bg-white flex items-center justify-center p-4 min-h-[420px] md:min-h-[520px] lg:min-h-[640px]">
-            <img src="{{ product.thumbnail }}" alt="{{ product.name }}"
-                class="w-auto max-w-full max-h-[640px] object-contain">
-          </div>
-        {% else %}
-          <div class="w-full bg-[#F3F8FB] rounded-lg aspect-[4/3]"></div>
-        {% endif %}
-      </div>
+  // always clear loader & show article fallback (guarantee)
+  function bailToReady(reason) {
+    console.warn('[product-patcher] bailToReady:', reason);
+    try { showState('ready'); } catch (e) { /* ignore */ }
+  }
 
-      <!-- Right column: info -->
-       <div class="lg:col-span-5 flex flex-col justify-start">
-        <!-- Category and Date -->
-        <div class="mt-3 flex items-center gap-4 text-sm">
-        {% if product.category|lower == "popular" %}
-          <span class="inline-block px-2 py-1 rounded text-sm font-medium text-green-700 bg-green-100">
-            {{ product.category }}
-          </span>
-        {% else %}
-          <span class="inline-block px-2 py-1 rounded text-sm font-medium text-white bg-red-600">
-            {{ product.category }}
-          </span>
-        {% endif %}
-        <time datetime="{{ product.date_added|date:'c' }}" class="text-gray-500">
-          {{ product.date_added|date:"d M Y" }}
-        </time>
-        </div>
+  // quick server-render detection: if name or price already present, assume server-rendered
+  function looksServerRendered() {
+    try {
+      if (productName && productName.textContent && productName.textContent.trim() !== '') return true;
+      if (productPrice && productPrice.textContent && /[0-9]/.test(productPrice.textContent)) return true;
+    } catch (e) { /* ignore */ }
+    return false;
+  }
 
-        <!-- Price -->
-        <div class="mt-6">
-          <div class="text-lg text-gray-600">The Price:</div>
-          <div class="text-3xl font-extrabold text-[#111827]">
-            Rp {{ product.price }}
-          </div>
-        </div>
+  // fetch with timeout
+  function fetchWithTimeout(url, opts = {}, timeout = 7000) {
+    return Promise.race([
+      fetch(url, opts),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), timeout))
+    ]);
+  }
 
-        <!-- Seller -->
-        <div class="mt-6">
-          <h3 class="text-sm font-semibold text-gray-900">Seller</h3>
-          <ul class="list-disc list-inside mt-2 text-sm text-gray-700">
-            <li>{{ product.user.username }}</li>
-          </ul>
-        </div>
+  // safe helpers to patch only empty fields
+  function setIfEmpty(el, text) {
+    if (!el) return;
+    if (!el.textContent || el.textContent.trim() === '' || el.textContent.includes('{{')) {
+      el.textContent = text == null ? '' : String(text);
+    }
+  }
+  function setImageIfEmpty(imgEl, src, alt) {
+    if (!imgEl) return;
+    const existing = imgEl.getAttribute('src');
+    const emptyAttr = !existing || existing.trim() === '' || existing.includes('{{');
+    if (src && emptyAttr) {
+      imgEl.src = src;
+      if (alt) imgEl.alt = alt;
+    }
+  }
 
-        <!-- Details -->
-        <div class="mt-6 border-t border-gray-100 pt-4">
-          <div class="flex items-center justify-between">
-            <div class="text-sm font-medium text-gray-900">Details</div>
-            <div class="text-sm text-gray-400">+</div>
-          </div>
-        </div>
+  // format price
+  function formatPrice(v) {
+    if (v == null || v === '') return '';
+    const n = Number(v);
+    if (!Number.isNaN(n)) return new Intl.NumberFormat('id-ID', { style:'currency', currency:'IDR', maximumFractionDigits:0 }).format(n);
+    return String(v);
+  }
 
-        <!-- Description -->
-        <div class="mt-4">
-          <h3 class="text-sm font-semibold text-gray-900">Description── .✦:</h3>
-          <div class="mt-3 prose prose-sm max-w-none text-gray-700">
-            ⤷"{{ product.description }} ˎ"˗
-          </div>
-        </div>
+  // If server already rendered, show article and stop
+  if (looksServerRendered()) {
+    console.debug('[product-patcher] server-rendered detected -> showing article');
+    showState('ready');
+    return;
+  }
 
-        <!-- Footer -->
-        <div class="mt-8 bg-[#395886] rounded-b-2xl">
-        <div class="text-center text-m font-bold text-white py-4">
-          ᯓ⚽︎LDSCHOOL STRIKEᯓ
-        </div>
-      </div>
-      </div>
-    </div>
+  // If no endpoint, show article fallback immediately (avoid infinite loader)
+  if (!PRODUCT_DETAIL_ENDPOINT) {
+    bailToReady('no PRODUCT_DETAIL_ENDPOINT configured or product id missing');
+    return;
+  }
+
+  // Safety net: if script somehow doesn't finish, force show after X ms
+  const safetyTimeout = setTimeout(() => {
+    bailToReady('safety timeout triggered');
+  }, 7500); // 7.5s max
+
+  // Main fetch + patch
+  (async function() {
+    try {
+      showState('loading');
+      console.debug('[product-patcher] fetching', PRODUCT_DETAIL_ENDPOINT);
+
+      const resp = await fetchWithTimeout(PRODUCT_DETAIL_ENDPOINT, { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' }, 7000);
+      if (!resp.ok) {
+        bailToReady('fetch returned non-ok: ' + resp.status);
+        return;
+      }
+
+      let data;
+      try {
+        data = await resp.json();
+      } catch (e) {
+        bailToReady('invalid json from endpoint');
+        return;
+      }
+
+      if (!data) {
+        bailToReady('empty json payload');
+        return;
+      }
+
+      // patch only empty/templated fields
+      try {
+        setIfEmpty(productName, data.name || '');
+        if (productPrice) {
+          const cur = productPrice.textContent || '';
+          if (cur.trim() === '' || cur.includes('{{')) {
+            productPrice.textContent = formatPrice(data.price) || (data.price != null ? String(data.price) : '');
+          }
+        }
+        setImageIfEmpty(featuredImage, data.thumbnail || data.image || '', data.name || '');
+        if (productDate && ( !productDate.textContent || productDate.textContent.trim() === '')) {
+          if (data.date_added) {
+            const d = new Date(data.date_added);
+            productDate.textContent = isNaN(d) ? String(data.date_added) : d.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+            productDate.setAttribute('datetime', data.date_added);
+          }
+        }
+        if (productSeller) {
+          const sellerName = (data.user && data.user.username) || data.seller || '';
+          setIfEmpty(productSeller, sellerName);
+        }
+        if (productDescription && (!productDescription.textContent || productDescription.textContent.trim() === '')) {
+          // insert safe text inside a paragraph so your prose styling applies
+          const raw = data.description || '';
+          const esc = String(raw).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+          productDescription.innerHTML = `<p>${esc}</p>`;
+        }
+      } catch (e) {
+        console.warn('[product-patcher] patch error', e);
+      }
+
+      // all good -> show article
+      showState('ready');
+      console.debug('[product-patcher] success - article shown');
+
+    } catch (err) {
+      // any fetch/timeout/error -> bail to ready (do not keep loader)
+      bailToReady('fetch error: ' + (err && err.message));
+    } finally {
+      clearTimeout(safetyTimeout);
+    }
+  })();
+});
+</script>
 
 {% endblock content %}
