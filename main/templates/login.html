@@ -106,7 +106,7 @@
 
 <script>
 (function () {
-  // Helper aman untuk munculkan toast (dengan fallback)
+  // Helper aman untuk munculkan toast 
   function showToastSafe(message, type = 'normal') {
     if (typeof showToast === 'function') {
       showToast(message, type);
@@ -135,7 +135,7 @@
     return;
   }
 
-  // Buat elemen error text (nggak ganggu tampilan)
+  // Buat elemen error text 
   let errorEl = document.getElementById('loginError');
   if (!errorEl) {
     errorEl = document.createElement('div');

@@ -81,7 +81,7 @@
       document.getElementById('productForm').reset();
       document.getElementById('product_id').value = '';
     } else if (mode === 'edit') {
-      title.textContent = 'Edit Product';
+      title.textContent = 'ᯓ★Edit Your Product⋆˚࿔';
     }
     setTimeout(() => {
       modalContent.classList.remove('opacity-0', 'scale-95');
@@ -142,7 +142,6 @@
     }
   }
 
-  // Open modal in edit mode and populate fields using show_json_by_id
   async function openEditModal(productId) {
     if (!productId) return;
     const urlTemplate = `{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}`;
@@ -154,7 +153,6 @@
         return;
       }
       const data = await resp.json();
-      // populate
       document.getElementById('product_id').value = data.id || productId;
       document.getElementById('title').value = data.name || '';
       document.getElementById('price').value = data.price || '';

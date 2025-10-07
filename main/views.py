@@ -261,10 +261,6 @@ def login_user(request):
 @require_POST
 @csrf_protect
 def login_ajax(request):
-    """
-    Login via AJAX — menggunakan USERNAME saja (email tidak dipakai).
-    Expects POST fields: username and password.
-    """
     username = (request.POST.get('username') or '').strip()
     password = (request.POST.get('password') or '').strip()
 

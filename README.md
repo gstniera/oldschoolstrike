@@ -191,3 +191,56 @@ Tombol Edit dibuat sebagai link yang hanya ditampilkan bila user.is_authenticate
 
 v. Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
 Navbar ini menggunakan Tailwind untuk styling (background, border, shadow, z-index) dan dibagi menjadi tiga area: di kiri ada title, di tengah-kanan ada navigasi desktop yang nampilin link Home dan Create Product, dan bagian user desktop yang juga hanya tampil di layar lebar untuk menampilkan nama/npm/class, dan link Logout atau menampilkan Login/Register ketika belum terautentikasi. Untuk mobile ada tombol hamburger yang terdiri dari tiga ikon garis untuk men-toggle .mobile-menu yang awalnya hidden. Isinya adalah untuk melihat fitur tombol home, create product, nampilin identitas, serta link logout.
+
+
+TUGAS INDIVIDU 5:
+a. Apa perbedaan antara synchronous request dan asynchronous request?
+i. Ciri‑ciri Synchronous Request:
+> Perlilaku: Request dieksekusi secara berurutan secara blok (sekuensial), di mana satu tugas harus selesai sebelum tugas berikutnya dimulai yang dapat menyebabkan tampilan membeku. 
+> Pemblokiran: Bersifat memblokir dimana program akan berhenti dan menunggu respons dari permintaan sebelum menjalankan operasi selanjutnya.
+> Kelebihan: Alur kontrol lebih mudah diprediksi dan diimplementasikan, cocok untuk tugas-tugas sederhana yang tidak memerlukan penanganan respons yang kompleks. 
+ii. Ciri‑ciri Asynchronous Request:
+> Perilaku: Request dieksekusi dengan memulai tugas dan segera melanjutkan ke tugas berikutnya tanpa harus menunggu respons. ode selanjutnya tetap berjalan sambil menunggu callback untuk menangani respons. 
+> Pemblokiran: Bersifat non-pemblokiran dimana program dapat mengeksekusi tugas lain secara paralel . Asynchronous memanfaatkan event loop untuk mengeksekusi tugas lain selagi menunggu respons server.
+> Kelebihan: Menghasilkan kecepatan pemrosesan yang lebih baik dan aplikasi terasa lebih responsif, terutama untuk tugas berat yang memakan waktu karena respons diproses melalui callback atau promise (.then(), async/await).
+- reference:
+https://www.dicoding.com/blog/mengenal-fungsi-asynchronous-request-pada-javascript/#:~:text=Umumnya%20dalam%20dunia%20programing%2C%20kode,pastikan%20kapan%20pekerjaan%20itu%20selesai   
+
+b. Bagaimana AJAX bekerja di Django (alur request–response)?
+1. Sisi Klien (Browser): suatu aktivitas terjadi di halaman web, seperti klik tombol, pengiriman formulir, atau pergerakan kursor. 
+2. Membuat Permintaan AJAX: kode JavaScript di browser menggunakan library seperti Fetch API untuk membuat objek XMLHttpRequest atau menggunakan fetch untuk membuat permintaan ke server. 
+3. Mengirim Permintaan ke Server Django: permintaan ini yang berisi data atau informasi tertentu akan dikirim ke URL Django yang sesuai. View di Django kemdian menerima permintaan AJAX. 
+4. Menganalisis dan Memproses Permintaan: Django memeriksa apakah permintaan berasal dari AJAX. Fungsi view akan memproses data yang diterima dan melakukan operasi yang diperlukan (misalnya, mengambil data dari database, memvalidasi, atau memproses logika). 
+5. Menyiapkan Respons dan Mengirim ke Browser: setelah memproses maka view akan menyiapkan respons yang akan dikirim kembali ke browser. Respons ini biasanya dalam format JSON karena mudah diproses oleh JavaScript. Django kemudian mengirimkan data respons kembali ke browser. 
+6. Menangani Respons di JavaScript dan Memperbarui DOM: JavaScript di browser menangkap respons dari server. JavaScript secara langsung akan memperbarui bagian-bagian tertentu dari halaman web (Document Object Model/DOM) tanpa me-refresh halaman secara keseluruhan. 
+7. Menampilkan Data: konten di halaman web diubah untuk menampilkan data baru atau memberikan feedback kepada pengguna. 
+- reference:
+https://www.pluralsight.com/resources/blog/guides/work-with-ajax-django#:~:text=Cara%20Kerja%20AJAX,merespons%20kembali%20dengan%20data%20respons. 
+
+c. Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django?
+1. Performa dan Efisiensi 
+AJAX hanya mentransfer data yang dibutuhkan (biasanya JSON), bukan seluruh HTML. Ini akan menghemat bandwidth dan mempercepat respons. Memuat sebagian data mengurangi beban server dan memanfaatkan caching, karena bagian halaman yang tidak berubah tetap di-render di browser.
+2. User Experience Lebih Responsif
+Halaman tidak perlu di-refresh karena bagian tertentu diperbarui secara otomatis sehingga UI terasa responsif. Form asynchronous memungkinkan validasi real‑time. Pesan error dikirim balik dalam JSON sehingga pengguna dapat memperbaiki input tanpa reload.
+3. Skalabilitas
+Karena hanya memuat data yang diperlukan, server dapat menangani lebih banyak permintaan. Teknik seperti “infinite scroll” memanfaatkan AJAX untuk mengambil data bertahap sesuai kebutuhan pengguna.
+- reference:
+https://moldstud.com/articles/p-speed-up-your-django-app-how-to-use-ajax-with-django-templates-for-faster-page-loads#:~:text=If%20your%20web%20project%20still,according%20to%20research%20by%20Google 
+
+d. Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+1. Gunakan CSRF Token
+Django memiliki mekanisme bawaan untuk mencegah serangan CSRF. Pastikan setiap permintaan POST melalui AJAX menyertakan token csrftoken di header X-CSRFToken. Cara mendapatkannya adalah membaca cookie csrftoken kemudian mengirimnya di header sebelum setiap request. Tanpa token, middleware akan menolak request (status 403).
+2. Validasi Input di Server
+Lakukan validasi server menggunakan Django Forms atau serializers untuk memastikan format data benar untuk mencegah injeksi SQL dan XSS dan jangan hanya mengandalkan validasi di sisi client. Selalu validasi input di server walaupun telah divalidasi di klien. Gunakan QuerySet/filter untuk query parameterized dan hindari membangun query SQL dari input langsung.
+3. Gunakan HTTPS dan Enkripsi
+Pastikan seluruh komunikasi menggunakan protokol HTTPS. Ini melindungi data login dan register dari serangan man‑in‑the‑middle dan sniffing. 
+4. Kontrol Akses dan Autentikasi
+Pastikan view yang menerima permintaan login/register hanya dapat diakses oleh user yang sesuai. Gunakan sistem authenticate() dan login() bawaan Django, serta atur @login_required pada endpoint sensitif. Bagi endpoint API, gunakan token-based authentication untuk menghindari sesi cookies rawan CSRF. 
+- reference:
+https://www.freecodecamp.org/news/how-to-secure-your-django-app/#:~:text=1,ensure%20that%20you%20don%27t%20set
+https://aisaastemplate.com/blog/5-strategies-mastering-django-ajax-form-submissions/#:~:text=,injection%20and%20other%20malicious%20attacks
+
+e. Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
+AJAX meningkatkan user experience dengan memungkinkan pembaruan sebagian halaman web secara asynchronous (di latar belakang) tanpa harus memuat ulang seluruh halaman, menghasilkan pengalaman yang lebih cepat, lancar, dan interaktif. Hal ini membuat website terasa lebih responsif dan dinamis, memungkinkan pengguna untuk melakukan tindakan seperti mengisi formulir atau menggulir konten tanpa gangguan. 
+- reference:
+https://www.sekawanmedia.co.id/blog/apa-itu-ajax/
