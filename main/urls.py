@@ -3,6 +3,7 @@ from main.views import show_main, create_product, show_product, show_xml, show_j
 from main.views import show_xml_by_id, show_json_by_id, register, login_user, logout_user
 from main.views import edit_product, delete_product, add_product_entry_ajax
 from main.views import update_product_ajax, delete_product_ajax, login_ajax, register_ajax
+from main.views import proxy_image, create_product_flutter
 
 app_name = 'main'
 
@@ -19,6 +20,8 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('product/<str:id>/edit', edit_product, name='edit_product'),
     path('product/<str:id>/delete', delete_product, name='delete_product'),
+    path('proxy-image/', proxy_image, name='proxy_image'),
+    path('create-flutter/', create_product_flutter, name='create_product_flutter'),
     # ajax tambahan
     path('create-product-ajax/', add_product_entry_ajax, name='add_product_entry_ajax'),
     path('product/<str:id>/update-ajax/', update_product_ajax, name='update_product_ajax'),

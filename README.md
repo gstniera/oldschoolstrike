@@ -169,7 +169,7 @@ https://www.w3schools.com/css/css_boxmodel.asp#:~:text=%2A%20Content%20,The%20ma
 
 d. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
 > Flexbox (Flexible Box Layout) adalah model layout satu dimensi. Flexbox fokus pada pengaturan elemen dalam satu baris atau satu kolom saja. Dengan flexbox, kita bisa mendistribusikan ruang di antara item dan mengatur perataan horizontal/vertikal. Flexbox berguna untuk layout yang sederhana dan linier, misalnya menu navigasi, toolbar, atau mengatur kumpulan tombol dalam satu baris. Flexbox juga berguna untuk tata letak responsive di satu arah karena elemen dapat wrap atau nyesuaiin ukurannya kalau ruang berubah.
-> CSS Grid adalah model layout dua dimensi yang membuat kita mengatur elemen dalam baris dan kolom secara bersamaan. Dengan grid, kita dapat mendefinisikan jumlah baris dan kolom, mengatur jarak antar sel (gap), dan menempatkan item di sel tertentu. Grid berguna untuk membuat desain halaman yang lebih kompleks dan terstruktur, seperti dashboard, galeri produk, dll. Grid memudahkan layout responsive  yang perlu menyesuaikan banyak kolom/baris pada ukuran layar berbeda.
+> CSS Grid adalah model layout dua dimensi yang membuat kita mengatur elemen dalam baris dan kolom secara bersamaan. Dengan grid, kita dapat mendefinisikan jumlah baris dan kolom, mengatur jarak antar sel (gap), dan menempatkan item di sel tertentu. Grid berguna untuk membuat desain halaman yang lebih kompleks dan terstruktur, seperti dashboard, galeri produk, dll. Grid memudahkan layout responsive yang perlu menyesuaikan banyak kolom/baris pada ukuran layar berbeda.
 Flexbox cocok untuk mengatur baris atau kolom sederhana dengan item dinamis, sedangkan Grid cocok untuk layout keseluruhan halaman yang kompleks. 
 - reference:
 Irhan Hisyam. (2023, October 31). CSS Grid vs Flexbox: Perbandingan, Penggunaan, dan Contohnya. Dibimbing.id. Retrieved from https://dibimbing.id/blog/detail/memahami-penggunaan-css-grid-dan-flexbox#:~:text=CSS%20Grid%20sangat%20berguna%20untuk,yang%20lebih%20sederhana%20dan%20linier
@@ -193,15 +193,15 @@ v. Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsi
 Navbar ini menggunakan Tailwind untuk styling (background, border, shadow, z-index) dan dibagi menjadi tiga area: di kiri ada title, di tengah-kanan ada navigasi desktop yang nampilin link Home dan Create Product, dan bagian user desktop yang juga hanya tampil di layar lebar untuk menampilkan nama/npm/class, dan link Logout atau menampilkan Login/Register ketika belum terautentikasi. Untuk mobile ada tombol hamburger yang terdiri dari tiga ikon garis untuk men-toggle .mobile-menu yang awalnya hidden. Isinya adalah untuk melihat fitur tombol home, create product, nampilin identitas, serta link logout.
 
 
-TUGAS INDIVIDU 5:
+TUGAS INDIVIDU 6:
 a. Apa perbedaan antara synchronous request dan asynchronous request?
 i. Ciri‑ciri Synchronous Request:
 > Perlilaku: Request dieksekusi secara berurutan secara blok (sekuensial), di mana satu tugas harus selesai sebelum tugas berikutnya dimulai yang dapat menyebabkan tampilan membeku. 
 > Pemblokiran: Bersifat memblokir dimana program akan berhenti dan menunggu respons dari permintaan sebelum menjalankan operasi selanjutnya.
 > Kelebihan: Alur kontrol lebih mudah diprediksi dan diimplementasikan, cocok untuk tugas-tugas sederhana yang tidak memerlukan penanganan respons yang kompleks. 
 ii. Ciri‑ciri Asynchronous Request:
-> Perilaku: Request dieksekusi dengan memulai tugas dan segera melanjutkan ke tugas berikutnya tanpa harus menunggu respons. ode selanjutnya tetap berjalan sambil menunggu callback untuk menangani respons. 
-> Pemblokiran: Bersifat non-pemblokiran dimana program dapat mengeksekusi tugas lain secara paralel . Asynchronous memanfaatkan event loop untuk mengeksekusi tugas lain selagi menunggu respons server.
+> Perilaku: Request dieksekusi dengan memulai tugas dan segera melanjutkan ke tugas berikutnya tanpa harus menunggu respons. Kode selanjutnya tetap berjalan sambil menunggu callback untuk menangani respons. 
+> Pemblokiran: Bersifat non-pemblokiran dimana program dapat mengeksekusi tugas lain secara paralel. Asynchronous memanfaatkan event loop untuk mengeksekusi tugas lain selagi menunggu respons server.
 > Kelebihan: Menghasilkan kecepatan pemrosesan yang lebih baik dan aplikasi terasa lebih responsif, terutama untuk tugas berat yang memakan waktu karena respons diproses melalui callback atau promise (.then(), async/await).
 - reference:
 https://www.dicoding.com/blog/mengenal-fungsi-asynchronous-request-pada-javascript/#:~:text=Umumnya%20dalam%20dunia%20programing%2C%20kode,pastikan%20kapan%20pekerjaan%20itu%20selesai   
